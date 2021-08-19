@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
 
 // 3 - Classes
 public class Pet {
@@ -42,6 +43,10 @@ public class Pet {
         .then() //Então
                 .log().all()
                 .statusCode(200)
+                .body("name", is ("kira"))
+                .body("status", is("available"))
+                .body("category.name", is("dog"))
+                .body("tag.id", is(2021))
         ;
 
     }
