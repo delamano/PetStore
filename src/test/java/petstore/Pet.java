@@ -5,6 +5,7 @@ package petstore;
 
 
 import org.testng.annotations.Test;
+import org.testng.annotations.TestInstance;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 
 // 3 - Classes
 public class Pet {
@@ -26,7 +28,7 @@ public class Pet {
     }
 
     //Inlcuir - Create - Post
-    @Test //Identifica método ou função como um teste para o TestNG
+    @Test(priority = 1) //Identifica método ou função como um teste para o TestNG
     public void incluirPet() throws IOException {
         String jsonBody = lerJson("db/pet1.json");
 
@@ -46,10 +48,32 @@ public class Pet {
                 .body("name", is ("kira"))
                 .body("status", is("available"))
                 .body("category.name", is("dog"))
-                .body("tag.id", is(2021))
+                .body("tags.name", contains("semana do teste"))
         ;
 
     }
+    @Test(priority = 2)
+    public void consultarPet(){
+        String petId = "19930808";
+
+        given()
+                .contentType("application/json")
+                .log().all()
+        .when()
+                .get(uri+"/"+petId)
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("name", is("kira"))
+                .body("category.name", is("dog"))
+                .body("status", is("available"))
+        ;
+
+        System.out.println("é o test");
+
+    }
+
+
 
 }
 
