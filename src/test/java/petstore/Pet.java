@@ -73,6 +73,25 @@ public class Pet {
 
     }
 
+    @Test(priority = 3)
+    public void alterarPet() throws IOException {
+        String jsonBody = lerJson("db/pet2.json");
+
+        given()
+                .contentType("application/json")
+                .log().all()
+                .body(jsonBody)
+        .when()
+                .put(uri)
+        .then()
+                .log().all()
+                .statusCode(200)
+                .body("name", is("kira"))
+                .body("status", is ("sold"))
+        ;
+
+    }
+
 
 
 }
